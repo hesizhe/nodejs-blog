@@ -37,8 +37,18 @@ exports.addSubmit = async  (ctx) => {
 
     await new Promise((resolve, reject) => {
         const _article= new Article(data);
+
+        // 保存文章
         _article.save((err, data) => {
             if(err) {return reject(err);}
+            // 保存成功
+            // 更新用户文章计数
+            User.update({_id: data.author}, {$inc: {articleNum: 1}}, err => {
+                if(err)return console.log(err);
+            })
+
+            // 更新用户评论计数
+
 
             resolve(data);
         });

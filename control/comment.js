@@ -3,8 +3,8 @@ const {db} = require('../Schema/config');
 const ArticleSchema = require('../Schema/article');
 const Article = db.model("articles", ArticleSchema);
 
-// const UserSchema = require('../Schema/user');
-// const User = db.model("users", UserSchema);
+const UserSchema = require('../Schema/user');
+const User = db.model("users", UserSchema);
 
 const CommentSchema = require('../Schema/comment');
 const Comment = db.model("comments", CommentSchema);
@@ -30,11 +30,17 @@ exports.save = async (ctx) => {
                 status: 1,
                 msg: "评论成功"
             }
-            // 更新评论 count
-        Article
-            .update({_id: data.article},{$inc: {commentNum: 1}}, (err) => {
+
+            // 更新当前文章评论计数
+            Article.update({_id: data.article}, {$inc: {commentNum: 1}}, (err) => {
                 if(err)return console.log(err);
-            })
+            });
+
+            // 更新用户评论计数
+            User.update({_id: data.form}, {$inc: {commentNum: 1}}, (err) => {
+                if(err)return console.log(err);
+            });
+
         })
         .catch(err => {
             console.log(err);

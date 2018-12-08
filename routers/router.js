@@ -2,6 +2,7 @@ const Router = require('koa-router');
 const user = require('../control/user');
 const article = require('../control/article');
 const comment = require('../control/comment');
+const admin = require('../control/admin');
 
 const router = new Router();
 
@@ -45,6 +46,15 @@ router.get('/article/:id', user.keeplog, article.details);
 // 提交评论
 router.post('/comment', user.keeplog, comment.save);
 
+// 管理员路由
+router.get('/admin/:id', user.keeplog, admin.index);
+
+
+// 以上都未匹配成功
+router.get('*', async ctx => {
+    // ctx.status = 404;
+    await ctx.render("404");
+});
 
 module.exports = router;
 

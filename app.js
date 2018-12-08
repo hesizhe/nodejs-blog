@@ -34,6 +34,37 @@ app
         console.log("项目启动成功,监听在3000端");
     });
 
+// 创建管理员用户
+const {db} = require('./Schema/config');
+const UserSchema = require('./Schema/user');
+const encrypt = require("./util/encrypt");
+const User = db.model("users", UserSchema);
+
+User
+    .find({username: "admin"})
+    .then(data => {
+        if(data.length === 0) {
+            // 管理员用户不存在 需要创建
+            new User({
+                username: "admin",
+                password: encrypt("admin"),
+                role: 10,
+                articleNum: 0,
+                commentNum: 0
+            })
+                .save()
+                .then(data => {
+                    console.log(data);
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+        } else {
+            console.log("管理员用户已存在");
+        }
+    });
+
+
 
 
 
