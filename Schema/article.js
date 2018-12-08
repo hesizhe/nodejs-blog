@@ -8,6 +8,7 @@ const ArticleSchema = new Schema({
         type: ObjectId,
         ref: "users"
     },
+    commentNum: Number,
     tips: String
 },{
     versionKey: false,

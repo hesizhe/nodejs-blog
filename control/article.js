@@ -33,6 +33,7 @@ exports.addSubmit = async  (ctx) => {
 
     // 添加文章作者
     data.author = ctx.session.uId;
+    data.commentNum = 0;
 
     await new Promise((resolve, reject) => {
         const _article= new Article(data);
@@ -48,6 +49,7 @@ exports.addSubmit = async  (ctx) => {
         }
     })
     .catch(err => {
+        console.log(err);
         ctx.body = {
             msg: "请重新发送",
             status: 0
@@ -60,7 +62,7 @@ exports.getList = async (ctx) => {
     // 查询文章(作者 头像)
     let page = ctx.params.id || 1;
 
-    const  maxNum = await Article.estimatedDocumentCount((err, num) => err? console.log(err) : num)
+    const maxNum = await Article.estimatedDocumentCount((err, num) => err? console.log(err) : num)
     const artList = await Article
         .find()
         .sort("-created")
@@ -72,7 +74,6 @@ exports.getList = async (ctx) => {
         })
         .then(data => data)
         .catch(err => console.log(err));
-    console.log(artList);
 
     await ctx.render('index', {
         title: "博客实战主页",
@@ -93,7 +94,6 @@ exports.details = async (ctx) => {
         .findById(_id)
         .populate("author", "username")
         .then(data => data);
-    console.log(article);
 
     // 查询当前文章所关联的评论数据
     const comment = await Comment

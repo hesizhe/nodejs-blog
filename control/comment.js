@@ -31,10 +31,13 @@ exports.save = async (ctx) => {
                 msg: "评论成功"
             }
             // 更新评论 count
-
-
+        Article
+            .update({_id: data.article},{$inc: {commentNum: 1}}, (err) => {
+                if(err)return console.log(err);
+            })
         })
         .catch(err => {
+            console.log(err);
             message = {
                 status: 0,
                 msg: "用户未登录"
