@@ -15,7 +15,7 @@ layui.use(["element", "laypage"], () => {
         jump(obj, f) {
             $("#laypage a").each((i, v) => {
                 let pageValue = `/page/${$(v).data("page")}`
-                if ($(v).data("page") > 0 && $(v).data("page") <= $("#laypage a").length) {
+                if ($(v).data("page") > 0 && $(v).data("page") < $("#laypage a").length) {
                     v.href = pageValue
                 }
             })

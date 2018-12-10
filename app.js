@@ -60,7 +60,7 @@ User
                     console.log(err);
                 })
         } else {
-            console.log("管理员用户已存在");
+            console.log("管理员(Administrator)用户名-->admin, 密码-->admin");
         }
     });
 

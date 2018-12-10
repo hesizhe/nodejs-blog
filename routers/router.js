@@ -3,6 +3,7 @@ const user = require('../control/user');
 const article = require('../control/article');
 const comment = require('../control/comment');
 const admin = require('../control/admin');
+const upload = require('../util/upload');
 
 const router = new Router();
 
@@ -46,9 +47,23 @@ router.get('/article/:id', user.keeplog, article.details);
 // 提交评论
 router.post('/comment', user.keeplog, comment.save);
 
-// 管理员路由
+// 管理员admin路由
 router.get('/admin/:id', user.keeplog, admin.index);
 
+// 用户头像上传
+router.post('/upload', user.keeplog, upload.single('file'), user.upload);
+
+// 获取用户评论
+router.get('/user/comments', user.keeplog, comment.commentList);
+
+// 删除用户评论
+router.post('/comment/:id', user.keeplog, comment.del);
+
+// 获取用户文章
+router.get('/user/articles', user.keeplog, article.articleList);
+
+// 删除用户评论
+router.post('/article/:id', user.keeplog, article.del);
 
 // 以上都未匹配成功
 router.get('*', async ctx => {

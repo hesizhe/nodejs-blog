@@ -67,7 +67,7 @@ exports.addSubmit = async  (ctx) => {
     });
 }
 
-// 获取文章列表 并返回首页
+// 获取所有文章列表 并返回首页
 exports.getList = async (ctx) => {
     // 查询文章(作者 头像)
     let page = ctx.params.id || 1;
@@ -94,7 +94,6 @@ exports.getList = async (ctx) => {
 }
 
 // 文章详情
-
 exports.details = async (ctx) => {
     // 获取动态路由
     const _id = ctx.params.id
@@ -121,8 +120,43 @@ exports.details = async (ctx) => {
     })
 }
 
+// 获取用户文章列表
+exports.articleList = async  (ctx) => {
+    const uId = ctx.session.uId;
+    const data = await Article.find({author: uId});
+
+    ctx.body = {
+        code: 0,
+        count: data.length,
+        data
+    }
+}
+
+// 删除用户文章
+exports.del = async (ctx) => {
+    const articleId = ctx.params.id;
+    let flag = true;
+
+    // 删除文章
+    await Article.deleteOne({_id: articleId}, (err) => {
+        if(err) flag = false
+    });
+
+    // 删除文章对应的所有评论
+    await Comment.deleteMany({article: articleId}, (err) => {
+        if(err) flag = false;
+
+    });
 
 
+
+    if(flag) {
+        ctx.body = {
+            state: 1,
+            message: "删除成功"
+        }
+    }
+}
 
 
 
