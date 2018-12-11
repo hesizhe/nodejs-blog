@@ -2,17 +2,13 @@ const {Schema} = require('./config');
 
 const UserSchema = new Schema({
     username: String,
-    password: String, //写Number会出错
-    sex: {
-        type: String,
-        default: "男"
-    },
+    password: String,
     avatar: {
         type: String,
         default: "/avatar/default.jpg"
     },
     role: {
-        type: String,
+        type: Number,
         default: 0
     },
     articleNum: Number,

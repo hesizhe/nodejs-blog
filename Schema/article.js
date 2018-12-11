@@ -15,6 +15,19 @@ const ArticleSchema = new Schema({
     timestamps: {createdAt: "created"}
 });
 
+// 设置 article 的 remove钩子
+ArticleSchema.post("remove", (doc) => {
+    const Comment = require('../Models/comment');
+    const User = require('../Models/user');
+    const {author, _id: artId} = doc;
+
+    User.findByIdAndUpdate(author,　{$inc: {atricleNum: -1}}).exec();
+    Comment.find({article: artId})
+        .then(data => {
+            data.forEach(v => v.remove());
+        });
+});
+
 module.exports = ArticleSchema;
 
 

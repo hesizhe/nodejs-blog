@@ -1,14 +1,6 @@
-const {db} = require('../Schema/config');
-const ArticleSchema = require('../Schema/article');
-const Article = db.model("articles", ArticleSchema);
-
-const UserSchema = require('../Schema/user');
-const User = db.model("users", UserSchema);
-
-const CommentSchema = require('../Schema/comment');
-const Comment = db.model("comments", CommentSchema);
-
-
+const Article = require('../Models/article')
+const User = require('../Models/user')
+const Comment = require('../Models/comment')
 
 // 控制返回文章发表页面
 exports.addPage = async (ctx) => {
@@ -43,7 +35,7 @@ exports.addSubmit = async  (ctx) => {
             if(err) {return reject(err);}
             // 保存成功
             // 更新用户文章计数
-            User.update({_id: data.author}, {$inc: {articleNum: 1}}, err => {
+            User.updateOne({_id: data.author}, {$inc: {articleNum: 1}}, err => {
                 if(err)return console.log(err);
             })
 
@@ -134,7 +126,24 @@ exports.articleList = async  (ctx) => {
 
 // 删除用户文章
 exports.del = async (ctx) => {
-    const articleId = ctx.params.id;
+    const artId = ctx.params.id;
+    let res = {
+        state: 1,
+        message: "删除成功"
+    }
+
+    await Article.findById(artId)
+        .then(data => data.remove())
+        .catch(err => {
+            res = {
+                state: 0,
+                message: "删除失败"
+            }
+        });
+
+    ctx.body = res
+
+    /*
     let flag = true;
 
     // 删除文章
@@ -148,14 +157,13 @@ exports.del = async (ctx) => {
 
     });
 
-
-
     if(flag) {
-        ctx.body = {
-            state: 1,
-            message: "删除成功"
+            ctx.body = {
+                state: 1,
+                message: "删除成功"
+            }
         }
-    }
+    */
 }
 
 

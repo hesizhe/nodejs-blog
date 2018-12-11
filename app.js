@@ -44,7 +44,7 @@ User
     .find({username: "admin"})
     .then(data => {
         if(data.length === 0) {
-            // 管理员用户不存在 需要创建
+            // 管理员用户不存在-->创建
             new User({
                 username: "admin",
                 password: encrypt("admin"),
@@ -58,7 +58,7 @@ User
                 })
                 .catch(err => {
                     console.log(err);
-                })
+                });
         } else {
             console.log("管理员(Administrator)用户名-->admin, 密码-->admin");
         }

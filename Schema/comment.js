@@ -23,7 +23,20 @@ const CommentSchema = new Schema({
     }
 });
 
-module.exports = CommentSchema
+// 设置 comment 的 remove钩子
+CommentSchema.post("remove", (doc) => {
+    const Article = require('../Models/article');
+    const User = require('../Models/user');
+    const {form, article} = doc;
+
+    // 对应文章 评论计数 -1
+    Article.updateOne({_id: article}, {$inc: {commentNum: -1}}).exec();
+
+    // 对应文章的用户 评论计数 -1
+    User.updateOne({_id: form}, {$inc: {commentNum: -1}}).exec();
+});
+
+module.exports = CommentSchema;
 
 
 
