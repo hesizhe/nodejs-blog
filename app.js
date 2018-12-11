@@ -54,7 +54,7 @@ User
             })
                 .save()
                 .then(data => {
-                    console.log(data);
+                    console.log("创建成功==>管理员(Administrator)用户名-->admin, 密码-->admin");
                 })
                 .catch(err => {
                     console.log(err);
