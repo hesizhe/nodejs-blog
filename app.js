@@ -17,7 +17,7 @@ const CONFIG = {
     httpOnly: true,
     rolling: true,
     renew: true
-}
+};
 // 用户登录/注册 post
 app.use(body());
 app.use(session(CONFIG, app));
